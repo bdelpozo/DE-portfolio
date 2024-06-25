@@ -8,8 +8,8 @@ attending at the moment.
 The project is organized into several packages, each demonstrating a different concept:
 
 - `BasicExamples`: Contains a first easy example to break the ice.
-- `Config`: Contains a file with run configuration. In the future we will hopefully add some TypeSafe Config.
-- `DataStructures`: Will contain examples of different data structures.
+- `Config`: Contains a file with run configuration and Config Parser with TypeSafe.config library.
+- `DataStructures`: Contains an example of Data Structures.
 
 
 ## Dependencies

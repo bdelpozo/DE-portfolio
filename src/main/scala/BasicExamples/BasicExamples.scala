@@ -1,11 +1,14 @@
 package de.portfolio
 package BasicExamples
 
+import config.ConfigParser
+
 object BasicExamples extends App {
   // If you need a piece of code that can be run, you can implement a Scala Object called "Something extends App {}"
   // Now you can run this object.
   // Let me show a serie of basic examples in order to go into it.
 
+  println(s"Welcome to ${ConfigParser().getAppName}, in version ${ConfigParser().getAppVersion}")
   // Variables, first functions and control sentences.
 
   type Day = Int
