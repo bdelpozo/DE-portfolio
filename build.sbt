@@ -9,22 +9,22 @@ scalaVersion:= "2.13.14"
 idePackagePrefix := Some("de.portfolio")
 
 val VersionSpark = "3.5.1"
-//val VersionCatsCore = "2.12.0"
+val VersionCatsCore = "2.12.0"
 val VersionScalaTest = "3.2.18"
 val VersionScalafmt = "3.8.1"
 
-//val sparkDependencies = Seq(
-//  "org.apache.spark" %% "spark-core" % VersionSpark % Provided,
-//  "org.apache.spark" %% "spark-sql" % VersionSpark % Provided,
-//  "org.apache.spark" %% "spark-graphx" % VersionSpark % Provided,
-//)
+val sparkDependencies = Seq(
+  "org.apache.spark" %% "spark-core" % VersionSpark % Provided,
+  "org.apache.spark" %% "spark-sql" % VersionSpark % Provided,
+  "org.apache.spark" %% "spark-graphx" % VersionSpark % Provided,
+)
 
-//val catsDependencies = Seq(
-//  "org.typelevel" %% "cats-core" % VersionCatsCore
-//  // Cats relies on improved type inference via the fix for SI-2712, which is not enabled by default.
-//  // For Scala 2.12 you should add the following to your build.sbt:
-//  // scalacOptions += "-Ypartial-unification"
-//)
+val catsDependencies = Seq(
+  "org.typelevel" %% "cats-core" % VersionCatsCore
+  // Cats relies on improved type inference via the fix for SI-2712, which is not enabled by default.
+  // For Scala 2.12 you should add the following to your build.sbt:
+  // scalacOptions += "-Ypartial-unification"
+)
 
 val testDependencies = Seq(
   "org.scalatest" %% "scalatest" % VersionScalaTest % "test",
@@ -42,11 +42,11 @@ val scalaFmtDependencies = Seq(
 )
 
 // Spark Testing
-//Test / fork := true
-//Test / parallelExecution := false
-//
-//libraryDependencies ++= sparkDependencies ++ catsDependencies ++ testDependencies ++
-//  jmhDependencies ++ scalaFmtDependencies
+Test / fork := true
+Test / parallelExecution := false
+
+libraryDependencies ++= sparkDependencies ++ catsDependencies ++ testDependencies ++
+  jmhDependencies ++ scalaFmtDependencies
 
 // Add JVM Options
 javaOptions ++= Seq(
