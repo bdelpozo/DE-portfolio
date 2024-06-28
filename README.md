@@ -8,7 +8,7 @@ attending at the moment.
 The project is organized into several packages, each demonstrating a different concept:
 
 - `BasicExamples`: Contains a first easy example to break the ice.
-- `Config`: Contains a file with run configuration and Config Parser with TypeSafe.config library.
+- `Config`: Contains a file with run configuration and ConfigParser with TypeSafe.config library.
 - `DataStructures`: Contains an example of Data Structures.
 
 
@@ -32,7 +32,7 @@ sbt run
 
 ## Testing
 
-Tests will be located in the src/test/scala directory. You can run the tests using the following command:
+Tests are be located in the src/test/scala directory. You can run the tests using the following command:
 
 ```bash
 sbt test

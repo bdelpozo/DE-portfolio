@@ -26,7 +26,9 @@ we can use its config information too.
 - `application.conf`: It's another config file that it's usually used for more specific configuration.
 For example, if you're working at the moment in a different environment, it can be used to overwrite config from
 reference.conf if we don't want to modify reference.conf.
-
+Be aware that the folder resources must be created in main/scala and its name has to be "resources". The name of the
+other files must be correctly spelled too because if not, the configuration won't be found.
+Error like: Exception in thread "main" com.typesafe.config.ConfigException$Missing: system properties: No configuration setting found for key 'title'
 Over all, using this Config good practice, you will have your configuration outside
 your code, so you can change it if necessary easily and your code will be cleaner.
 
