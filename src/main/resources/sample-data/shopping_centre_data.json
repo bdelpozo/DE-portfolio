@@ -1,0 +1,3 @@
+{"name":"Shop1", "category":"supermarket", "num_employees":8, "sales_last_month":25104}
+{"name":"Shop2", "category":"clothes", "num_employees":3, "sales_last_month":29319}
+{"name":"Shop3", "category":"sports", "num_employees":3, "sales_last_month":27619}

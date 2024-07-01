@@ -2,7 +2,9 @@ package de.portfolio
 package spark
 
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import org.apache.spark.sql.functions.{avg, col, map_concat}
+import org.apache.spark.sql.{Column, DataFrame, SaveMode, SparkSession}
+
 
 object FirstSparkAppConf {
 
@@ -40,10 +42,13 @@ object FirstSparkAppDataGen {
 
 object FirstSparkApp extends App {
   // SparkSession builder helps us to create a SparkSession. Simple Spark can be create like bellow
-  // .master("local[*]") configures where it's going to be executed, and * means cpus needed but we could specify a number of cpu
+  // .master("local[*]") configures where it's going to be executed, and * means cores are needeed but we could specify a number of core we want to use
 
   val spark = SparkSession.builder().master("local[*]")
     .appName("PrimeraAppSpark").getOrCreate()
+
+  // setLogLevel
+  spark.sparkContext.setLogLevel("ERROR")
 
   import spark.implicits._
   // First let's use generateData to generate data to use our Spark App
@@ -53,20 +58,24 @@ object FirstSparkApp extends App {
   println("Publicated Marks:")
   df.show(truncate = false)
 
-  val passedFirstExam: DataFrame = df.filter($"mark1" > 70)
+  val exam1PassCondition = col("mark1") > 70
+  val exam2PassCondition = col("mark2") > 65
+
+  val passedFirstExam: DataFrame = df.filter(exam1PassCondition)
   println("Passed first exam:")
   passedFirstExam.show(truncate=false)
-  val passedSecondExam: DataFrame = df.filter($"mark2" > 65)
+  val passedSecondExam: DataFrame = df.filter(exam2PassCondition)
   println("Passed second exam:")
   passedSecondExam.show(truncate = false)
 
   // Case 1: It is needed to pass both exams to pass
-  val passedCase1: DataFrame = df.filter($"mark1" > 70 && $"mark2" > 65 )
+  val passedCase1: DataFrame = df.filter(exam1PassCondition && exam2PassCondition )
   println("Passed both exams:")
   passedCase1.show(truncate=false)
 
   // Case 2: If the average mark is passed, you passed
-  val passedCase2: DataFrame = df.filter(($"mark1"+$"mark2")/2 > 67)
+  val case2PassCondition = (col("mark1") + col("mark2"))/2 > 67
+  val passedCase2: DataFrame = df.filter(case2PassCondition)
   println("Average mark is passed:")
   passedCase2.show(truncate=false)
 
@@ -77,7 +86,18 @@ object FirstSparkApp extends App {
   passedCase2.write.mode(SaveMode.Overwrite)
     .csv("out/passedCase2.csv")
 
+  // In order to see easily if the pupil has passed, we are going to add a new column more readable
+  println("more readable results")
+//  val df_nuevo: DataFrame = df.withColumn("results", col("mark1"))
+  // TODO map con las notas aprobado y suspenso en otra columna
+
+  println("Average mark for exam 1")
+  df.agg(avg("mark1").alias("avg_mark_exam_1")).show()
+
+  println("Average mark for exam 2")
+  df.agg(avg("mark2").alias("avg_mark_exam_2")).show()
+
   // and then stop the Spark App
   spark.stop()
+  System.exit(0)
 }
-
