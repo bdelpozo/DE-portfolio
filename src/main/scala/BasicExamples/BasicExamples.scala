@@ -3,6 +3,21 @@ package BasicExamples
 
 import config.ConfigParser
 
+object BasicFunctions {
+  // Using a more functional approach with pattern matching and no vars
+  def suffixForDay(day: Int): String = {
+    val suffix = day match {
+      case 1 | 21 | 31 => "st"
+      case 2 | 22 => "nd"
+      case 3 | 23 => "rd"
+      case _ => "th"
+    }
+    suffix
+  }
+
+
+}
+
 object BasicExamples extends App {
   // If you need a piece of code that can be run, you can implement a Scala Object called "Something extends App {}"
   // Now you can run this object.
@@ -50,6 +65,8 @@ object BasicExamples extends App {
     else preffix = "th"
     preffix
   }
+
+
 
   println(s"Today is ${monthName} ${today._1}${addDatePreffix(today._1)}, ${today._3}")
 
