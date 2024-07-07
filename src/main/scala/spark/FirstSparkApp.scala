@@ -100,4 +100,5 @@ object FirstSparkApp extends App {
   // and then stop the Spark App
   spark.stop()
   System.exit(0)
+
 }
