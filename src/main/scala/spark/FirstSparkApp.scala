@@ -1,6 +1,7 @@
 package de.portfolio
 package spark
 
+import de.portfolio.spark.FirstSparkApp.{case2PassCondition, df, exam1PassCondition, exam2PassCondition, spark}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions.{avg, col, map_concat}
 import org.apache.spark.sql.{Column, DataFrame, SaveMode, SparkSession}
@@ -69,7 +70,7 @@ object FirstSparkApp extends App {
   passedSecondExam.show(truncate = false)
 
   // Case 1: It is needed to pass both exams to pass
-  val passedCase1: DataFrame = df.filter(exam1PassCondition && exam2PassCondition )
+  val passedCase1: DataFrame = df.filter(exam1PassCondition && exam2PassCondition)
   println("Passed both exams:")
   passedCase1.show(truncate=false)
 
@@ -100,5 +101,18 @@ object FirstSparkApp extends App {
   // and then stop the Spark App
   spark.stop()
   System.exit(0)
+
+}
+
+case class DataIO(spark: SparkSession) {
+
+  // We could also define functions to do the filters:
+  def passedCase1M(df: DataFrame): DataFrame = {
+    df.filter(col("mark1") > 70 && col("mark2") > 65)
+  }
+  def passedCase2M(df: DataFrame): DataFrame = {
+    df.filter((col("mark1") + col("mark2"))/2 > 67)
+  }
+  // and now we can test this methods
 
 }
