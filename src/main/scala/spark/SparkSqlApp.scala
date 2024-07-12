@@ -49,36 +49,36 @@ object SparkSqlApp extends App with SparkSessionWrapper {
 
   df.createOrReplaceTempView("shopping_centre_data")
 
-//   To list Databases and Tables:
-//  spark.catalog.listDatabases().show(truncate = false)
-//  spark.catalog.listTables().show(truncate = false)
-//  print(s"Current Database is: ${spark.catalog.currentDatabase}")
-//  // if shopping-centre database does not exist we create it and set it to current
-//  if (!spark.catalog.databaseExists("shoppingcentre")) {
-//    spark.sql("CREATE DATABASE shoppingcentre")
-//  }
-//  spark.catalog.setCurrentDatabase("shoppingcentre")
-//  println()
-//  println(s"Current Database is: ${spark.catalog.currentDatabase}")
-//  println()
-//  // to have more information about tables:
-//  val catalog: Catalog = spark.catalog
-//  catalog.listTables().collect().foreach { table =>
-//    println(table)
-//    println(s" -- Tabla: ${table.name}")
-//    catalog.listColumns(table.name).collect().foreach( column =>
-//      println("    - " + column)
-//    )
-//  }
-//  // and we drop the database
-//  spark.sql("DROP DATABASE shoppingcentre CASCADE")
+   // To list Databases and Tables:
+  spark.catalog.listDatabases().show(truncate = false)
+  spark.catalog.listTables().show(truncate = false)
+  print(s"Current Database is: ${spark.catalog.currentDatabase}")
+  // if shopping-centre database does not exist we create it and set it to current
+  if (!spark.catalog.databaseExists("shoppingcentre")) {
+    spark.sql("CREATE DATABASE shoppingcentre")
+  }
+  spark.catalog.setCurrentDatabase("shoppingcentre")
+  println()
+  println(s"Current Database is: ${spark.catalog.currentDatabase}")
+  println()
+  // to have more information about tables:
+  val catalog: Catalog = spark.catalog
+  catalog.listTables().collect().foreach { table =>
+    println(table)
+    println(s" -- Tabla: ${table.name}")
+    catalog.listColumns(table.name).collect().foreach( column =>
+      println("    - " + column)
+    )
+  }
+  // and we drop the database
+  spark.sql("DROP DATABASE shoppingcentre CASCADE")
 
   // this database with its elements are stored in a directory called spark-warehouse
 
   // To know the total employees for category of shops we could do it by two different methods:
   println("Total employees per category")
-//  val result1 = spark.sql("SELECT category, sum(num_employees) as total_employees_category FROM shopping_centre_data GROUP BY category")
-//  result1.show()
+  val result1 = spark.sql("SELECT category, sum(num_employees) as total_employees_category FROM shopping_centre_data GROUP BY category")
+  result1.show()
   val result1_1 = df.groupBy("category").agg(functions.sum("num_employees").alias("total_employees_category")).orderBy("total_employees_category")
   result1_1.show()
   println("tipos" ,result1_1.schema)
