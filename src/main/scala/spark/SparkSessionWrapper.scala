@@ -40,6 +40,7 @@ trait SparkSessionWrapper {
   implicit val spark: SparkSession = createSparkSession.withLogLevel(InfoLevel).build
   class SessionBuilder {
     private var logLevel = "ERROR"
+    private var coresW = "local[*]"
     private var driverMemory: Memory   = 1.Gb
     private var executorMemory: Memory = 1.Gb
     private var driverCores   = 1
@@ -50,9 +51,17 @@ trait SparkSessionWrapper {
     private var hiveSupportEnabled = false
     private var deltaLakeSupportEnabled = false
     private var shufflePartitionsTuned = false
+    private var adaptativeDisabled = true
+    private var checkpointLocation = "./checkpoint"
+    private var deleteCheckpointLocation = false
+    private var shufflePartitions = 1
 
     def withLogLevel(level: LogLevel): SessionBuilder = {
       logLevel = level.level
+      this
+    }
+    def withCores(cores: String): SessionBuilder = {
+      coresW = cores
       this
     }
     def withDriverMemory(memory: Memory): SessionBuilder = {
@@ -96,11 +105,29 @@ trait SparkSessionWrapper {
       shufflePartitionsTuned = true
       this
     }
+    def withAdaptativeDisabled: SessionBuilder = {
+      adaptativeDisabled = false
+      this
+    }
+
+    def withCheckpointLocation(location: String): SessionBuilder = {
+      checkpointLocation = location
+      this
+    }
+
+    def withDeleteCheckpointEnabled: SessionBuilder = {
+      adaptativeDisabled = true
+      this
+    }
+    def withShufflePartitions(partitions: Int): SessionBuilder = {
+      shufflePartitions = partitions
+      this
+    }
 
     private def buildSparkSession(appName: String): SparkSession = {
       var builder: SparkSession.Builder = SparkSession
         .builder()
-        .master("local[*]")
+        .master(coresW)
         .appName(appName)
         .config("spark.driver.memory", driverMemory.toString)
         .config("spark.executor.memory", executorMemory.toString)
@@ -108,8 +135,8 @@ trait SparkSessionWrapper {
         .config("spark.executor.cores", executorCores.toString)
         // set off Spark-ui to avoid problem in testing
         .config("spark.ui.enabled", "false")
-
-
+        .config("spark.sql.streaming.checkpointLocation", "./checkpoint")
+        .config("spark.sql.shuffle.partitions", shufflePartitions.toString)
 
       if (offHeapEnabled) {
         builder = builder.config("spark.memory.offHeap.enabled", "true")
@@ -127,6 +154,14 @@ trait SparkSessionWrapper {
       if (shufflePartitionsTuned) {
         val cores = Runtime.getRuntime.availableProcessors
         builder = builder.config("spark.shuffle.partitions", cores.toString)
+      }
+
+      if (adaptativeDisabled) {
+        builder = builder.config("spark.sql.adaptive.enabled", "false")
+      }
+
+      if (deleteCheckpointLocation) {
+        builder = builder.config("spark.sql.streaming.forceDeleteTempCheckpointLocation", "true")
       }
 
       builder.getOrCreate()

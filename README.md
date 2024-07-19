@@ -1,16 +1,18 @@
 # DE-Portfolio
 
-This is my Data Engineer Portfolio. I'm going to share all I am currently learning from the Scala-Spark course I am
-attending at the moment.
+This is my Data Engineer Portfolio. I'm going to share all I am currently learning from the Scala-Spark and Kafka and
+Spark streaming course I am attending at the moment.
 
 ## Project Structure
 
 The project is organized into several packages, each demonstrating a different concept:
 
-- `BasicExamples`: Contains a first easy example to break the ice.
-- `Config`: Contains a file with run configuration and ConfigParser with TypeSafe.config library.
-- `DataStructures`: Contains an example of Data Structures.
-
+- `basicExamples`: Contains a first easy example to break the ice.
+- `config`: Contains a file with run configuration and ConfigParser with TypeSafe.config library.
+- `dataStructures`: Contains an example of Data Structures.
+- `spark`: Contains some examples of Spark applications and a SparkSessionWrapper very useful to use everywhere it's needed a Spar session.
+- `implicits`: Contains an object with some useful classes to define the SparkSessionWrapper.
+- `structured`: Contains a basic Structured Streaming app.
 
 ## Dependencies
 
@@ -20,6 +22,7 @@ The project uses the following main dependencies:
 - Scala version 2.13.14
 - Apache Spark version 3.5.1
 - ScalaTest version 3.2.18
+- MrPowers spark-fast-test version 1.3.0
 
 
 ## Building and Running
@@ -32,8 +35,15 @@ sbt run
 
 ## Testing
 
-Tests are be located in the src/test/scala directory. You can run the tests using the following command:
+Tests are located in the src/test/scala directory. You can run the tests using the following command:
 
 ```bash
 sbt test
 ```
+
+## Future improvements
+
+In the future more test will be added. Also, a new sbt module will be included with a structured streaming app,
+to complete this topic. 
+Any suggestions or contributions are more than welcome.
+Thank you.

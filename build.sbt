@@ -17,6 +17,8 @@ val sparkDependencies = Seq(
   "org.apache.spark" %% "spark-core" % VersionSpark % Provided,
   "org.apache.spark" %% "spark-sql" % VersionSpark % Provided,
   "org.apache.spark" %% "spark-graphx" % VersionSpark % Provided,
+  "org.apache.kafka" % "kafka-clients" % "3.7.0",
+  "org.apache.spark" % "spark-sql-kafka-0-10_2.13" % VersionSpark,
 )
 
 val catsDependencies = Seq(

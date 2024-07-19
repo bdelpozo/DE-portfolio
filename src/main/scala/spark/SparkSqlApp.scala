@@ -3,10 +3,11 @@ package spark
 
 import spark.SparkSessionWrapper
 
+import de.portfolio.spark.SparkSqlApp.df
 import org.apache.spark.sql.catalog.Catalog
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{avg, col, desc, rank}
-import org.apache.spark.sql.{DataFrame, functions}
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession, functions}
 
 object SparkSQLAppDataGen {
 
@@ -48,7 +49,7 @@ object SparkSqlApp extends App with SparkSessionWrapper {
 
   df.createOrReplaceTempView("shopping_centre_data")
 
-//   To list Databases and Tables:
+   // To list Databases and Tables:
   spark.catalog.listDatabases().show(truncate = false)
   spark.catalog.listTables().show(truncate = false)
   print(s"Current Database is: ${spark.catalog.currentDatabase}")
@@ -78,13 +79,14 @@ object SparkSqlApp extends App with SparkSessionWrapper {
   println("Total employees per category")
   val result1 = spark.sql("SELECT category, sum(num_employees) as total_employees_category FROM shopping_centre_data GROUP BY category")
   result1.show()
-  val result1_1 = df.groupBy("Category").agg(functions.sum("num_employees"))
+  val result1_1 = df.groupBy("category").agg(functions.sum("num_employees").alias("total_employees_category")).orderBy("total_employees_category")
   result1_1.show()
+  println("tipos" ,result1_1.schema)
 
   // Now we could continue doing operations like the following:
   // to know the average number of employees per shop:
   println("Average number of employees per category")
-  df.groupBy("category").agg(avg("num_employees").alias("average_num_employees")).show()
+  df.groupBy("category").agg(avg("num_employees").alias("average_num_employees")).orderBy("average_num_employees").show()
 
   // window operations: we can use lag, lead, rank, dense_rank, row_number... and all the window operations known in sql
   // to see a ranking of shops with more number of employees per category
@@ -101,5 +103,25 @@ object SparkSqlApp extends App with SparkSessionWrapper {
   // and it's the maximum in that category
 
   spark.stop()
+
+}
+
+case class DataIO2(spark: SparkSession) {
+
+  // We could also define functions to do the filters:
+  def avgEmployeesNumPerCategory(df: DataFrame): Dataset[Row] = {
+    df.groupBy("category").agg(avg("num_employees").alias("average_num_employees")).orderBy("average_num_employees")
+  }
+
+  def totalEmployeesNumPerCategory(df: DataFrame): Dataset[Row]= {
+    df.groupBy("category").agg(functions.sum("num_employees").alias("total_employees_category")).orderBy("total_employees_category")
+  }
+
+  def employeesNumShopsRanking(df: DataFrame): DataFrame = {
+    val windowSpec = Window.partitionBy("category").orderBy(desc("num_employees"))
+    val result = df.withColumn("rank", rank().over(windowSpec))
+    result
+  }
+  // and now we can test this methods
 
 }
