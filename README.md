@@ -1,7 +1,7 @@
 # DE-Portfolio
 
-This is my Data Engineer Portfolio. I'm going to share all I am currently learning from the Scala-Spark course I am
-attending at the moment.
+This is my Data Engineer Portfolio. I'm going to share all I am currently learning from the Scala-Spark and Kafka and
+Spark streaming course I am attending at the moment.
 
 ## Project Structure
 
@@ -12,6 +12,7 @@ The project is organized into several packages, each demonstrating a different c
 - `dataStructures`: Contains an example of Data Structures.
 - `spark`: Contains some examples of Spark applications and a SparkSessionWrapper very useful to use everywhere it's needed a Spar session.
 - `implicits`: Contains an object with some useful classes to define the SparkSessionWrapper.
+- `structured`: Contains a basic Structured Streaming app.
 
 ## Dependencies
 
@@ -39,3 +40,10 @@ Tests are located in the src/test/scala directory. You can run the tests using t
 ```bash
 sbt test
 ```
+
+## Future improvements
+
+In the future more test will be added. Also, a new sbt module will be included with a structured streaming app,
+to complete this topic. 
+Any suggestions or contributions are more than welcome.
+Thank you.
